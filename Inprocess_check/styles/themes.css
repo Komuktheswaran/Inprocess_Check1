@@ -1,0 +1,178 @@
+/* themes.css — Switchable Light/Dark Themes */
+
+/* Default (Light) Theme */
+:root,
+[data-theme="light"] {
+    --color-background: #F7F9FB;
+    --color-card-bg: #FFFFFF;
+    --color-text: #0F172A;
+    --color-muted: #E6EAF0;
+    --color-primary-blue: #3498DB;
+    --color-success: #2ECC71;
+    --color-danger: #E74C3C;
+    --radius: 10px;
+    --gap-xs: 8px;
+    --gap-sm: 10px;
+    --gap-md: 14px;
+    --gap-lg: 20px;
+    --gap-xl: 24px;
+    --control-padding: 12px;
+    --control-font: 16px;
+    --heading-font: 28px;
+    /* UI polish */
+    --elevation-1: 0 2px 6px rgba(0, 0, 0, 0.08);
+    --ring-color: color-mix(in oklab, var(--color-primary-blue) 25%, transparent);
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+    --color-background: #2C3E50;
+    --color-card-bg: #34495E;
+    --color-text: #ECF0F1;
+    --color-muted: #5C7891;
+    --color-primary-blue: #3498DB;
+    --color-success: #2ECC71;
+    --color-danger: #E74C3C;
+    --radius: 10px;
+    --gap-xs: 8px;
+    --gap-sm: 10px;
+    --gap-md: 14px;
+    --gap-lg: 20px;
+    --gap-xl: 24px;
+    --control-padding: 12px;
+    --control-font: 16px;
+    --heading-font: 28px;
+    /* UI polish */
+    --elevation-1: 0 2px 6px rgba(0, 0, 0, 0.3);
+    --ring-color: color-mix(in oklab, var(--color-primary-blue) 65%, transparent);
+}
+
+/* General Styles (No Forcing) */
+* {
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--color-background);
+    color: var(--color-text);
+    font-family: 'Roboto', system-ui, -apple-system, 'Segoe UI', Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#root {
+    background: var(--color-background);
+    min-height: 100vh;
+    color: var(--color-text);
+}
+
+.App {
+    background: var(--color-background);
+    min-height: 100vh;
+    color: var(--color-text);
+}
+
+/* Container classes */
+.home-container,
+.downloads-container,
+.enter-details-container,
+.create-param-container {
+    background: var(--color-background);
+    color: var(--color-text);
+}
+
+/* Card classes */
+.card,
+.home-header,
+.home-button,
+.download-form,
+.eds-form-section,
+.create-param-form,
+.parameter-info-card,
+.active-filters-card,
+.quick-actions-card {
+    background: var(--color-card-bg);
+    color: var(--color-text);
+    border-color: var(--color-muted);
+}
+
+/* Text colors */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+div,
+label {
+    color: var(--color-text);
+}
+
+/* Input styling */
+input,
+select,
+textarea {
+    background: var(--color-background);
+    color: var(--color-text);
+    border: 1.5px solid var(--color-muted);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--color-primary-blue);
+}
+
+/* Button styling */
+button {
+    background: var(--color-card-bg);
+    color: var(--color-text);
+    border: 1px solid var(--color-muted);
+}
+
+.btn-primary,
+.home-primary-button {
+    background: var(--color-primary-blue);
+    color: #ffffff;
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--color-primary-blue);
+    border: 2px solid var(--color-primary-blue);
+}
+
+/* Utilities */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--gap-xl);
+}
+
+.shadow-1 {
+    box-shadow: var(--elevation-1);
+}
+
+/* Responsive typography */
+@media (min-width: 1024px) {
+    :root {
+        --control-font: 17px;
+        --heading-font: 30px;
+    }
+}
+
+@media (min-width: 1440px) {
+    :root {
+        --control-font: 18px;
+        --heading-font: 32px;
+    }
+}

@@ -1,0 +1,489 @@
+/* EnterDetailsScreen.css — Separate cards for entry info and parameters */
+
+/* Main container */
+.enter-details-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--gap-xl, 24px);
+    color: var(--color-text, #0F172A);
+    background: var(--color-background, #F7F9FB);
+    min-height: calc(100vh - 48px);
+}
+
+/* Page title */
+.enter-details-title {
+    margin: 0 0 var(--gap-lg, 20px);
+    font-size: var(--heading-font, 28px);
+    color: var(--color-text, #0F172A);
+    text-align: center;
+}
+
+.enter-details-subtitle {
+    margin: 0 0 var(--gap-xl, 24px);
+    opacity: 0.8;
+    color: var(--color-text, #0F172A);
+    text-align: center;
+}
+
+/* Form sections - SEPARATE CARDS */
+.eds-form-section {
+    background: var(--color-card-bg, #FFFFFF);
+    border-radius: var(--radius, 10px);
+    box-shadow: var(--elevation-1, 0 2px 6px rgba(0, 0, 0, 0.08));
+    padding: var(--gap-xl, 24px);
+    margin-bottom: var(--gap-xl, 24px);
+    border: 1px solid var(--color-muted, #E6EAF0);
+}
+
+/* Section titles */
+.eds-section-title {
+    font-size: calc(var(--heading-font, 28px) - 6px);
+    font-weight: 600;
+    color: var(--color-text, #0F172A);
+    margin: 0 0 var(--gap-lg, 20px);
+    padding-bottom: var(--gap-xs, 8px);
+    border-bottom: 2px solid var(--color-primary-blue, #3498DB);
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm, 10px);
+}
+
+/* Different accent colors for different sections */
+.eds-form-section:first-of-type .eds-section-title {
+    border-bottom-color: var(--color-primary-blue, #3498DB);
+}
+
+.eds-form-section:first-of-type .eds-section-title::before {
+    content: "📝";
+    font-size: 20px;
+}
+
+.eds-form-section:nth-of-type(2) .eds-section-title {
+    border-bottom-color: var(--color-success, #2ECC71);
+}
+
+.eds-form-section:nth-of-type(2) .eds-section-title::before {
+    content: "⚙️";
+    font-size: 20px;
+}
+
+/* Form rows for entry information */
+.eds-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--gap-lg, 20px);
+    margin-bottom: var(--gap-lg, 20px);
+}
+
+@media (min-width: 768px) {
+    .eds-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .eds-row {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Input groups */
+.eds-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs, 8px);
+}
+
+.eds-input-group.full {
+    grid-column: 1 / -1;
+}
+
+/* Labels */
+.eds-label {
+    color: var(--color-text, #0F172A);
+    opacity: 0.8;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: var(--gap-xs, 8px);
+}
+
+/* Text inputs */
+.eds-text-input,
+.eds-picker {
+    background: var(--color-background, #F7F9FB);
+    color: var(--color-text, #0F172A);
+    border: 1.5px solid var(--color-muted, #E6EAF0);
+    border-radius: var(--radius, 10px);
+    padding: 12px 16px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.eds-text-input:focus,
+.eds-picker:focus {
+    border-color: var(--color-primary-blue, #3498DB);
+    box-shadow: 0 0 0 3px var(--ring-color, color-mix(in oklab, var(--color-primary-blue, #3498DB) 25%, transparent));
+}
+
+.eds-text-input::placeholder {
+    color: var(--color-text, #0F172A);
+    opacity: 0.5;
+}
+
+/* Parameter grid inside parameters section */
+.eds-param-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--gap-lg, 20px);
+    margin-bottom: var(--gap-xl, 24px);
+}
+
+@media (max-width: 768px) {
+    .eds-param-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Individual parameter cards */
+.eds-param-card {
+    background: var(--color-background, #F7F9FB);
+    border: 1px solid var(--color-muted, #E6EAF0);
+    border-radius: var(--radius, 10px);
+    padding: var(--gap-lg, 20px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+}
+
+.eds-param-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-color: var(--color-success, #2ECC71);
+}
+
+/* Parameter card header */
+.eds-param-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--gap-md, 14px);
+    padding-bottom: var(--gap-xs, 8px);
+    border-bottom: 1px solid var(--color-muted, #E6EAF0);
+}
+
+.eds-param-name {
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--color-text, #0F172A);
+    margin: 0;
+}
+
+.eds-param-unit {
+    background: var(--color-primary-blue, #3498DB);
+    color: #ffffff;
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+/* Parameter meta information */
+.eds-param-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--gap-md, 14px);
+    background: var(--color-card-bg, #FFFFFF);
+    padding: var(--gap-sm, 10px);
+    border-radius: var(--radius, 10px);
+    border: 1px solid var(--color-muted, #E6EAF0);
+}
+
+.eds-param-range {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex: 1;
+}
+
+.eds-param-range .label {
+    font-size: 11px;
+    opacity: 0.7;
+    color: var(--color-text, #0F172A);
+    margin-bottom: 2px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.eds-param-range .value {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--color-text, #0F172A);
+}
+
+/* Parameter inputs */
+.eds-param-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md, 14px);
+}
+
+.eds-param-input {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs, 8px);
+}
+
+.eds-param-input label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text, #0F172A);
+    opacity: 0.8;
+}
+
+.eds-param-input input,
+.eds-param-input select,
+.eds-param-input textarea {
+    background: var(--color-card-bg, #FFFFFF);
+    color: var(--color-text, #0F172A);
+    border: 1.5px solid var(--color-muted, #E6EAF0);
+    border-radius: var(--radius, 10px);
+    padding: 10px 12px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.eds-param-input input:focus,
+.eds-param-input select:focus,
+.eds-param-input textarea:focus {
+    border-color: var(--color-success, #2ECC71);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-success, #2ECC71) 25%, transparent);
+}
+
+.eds-param-input textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+/* Save button - inside parameters section */
+.eds-save-button {
+    background: var(--color-success, #2ECC71);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius, 10px);
+    padding: 16px 32px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap-xs, 8px);
+    margin: var(--gap-xl, 24px) auto 0;
+    min-width: 200px;
+    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+}
+
+.eds-save-button:hover:not(:disabled) {
+    background: color-mix(in oklab, var(--color-success, #2ECC71) 90%, black);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+}
+
+.eds-save-button:disabled {
+    background: var(--color-muted, #E6EAF0);
+    color: var(--color-text, #0F172A);
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Back button - standalone */
+.eds-back {
+    background: transparent;
+    color: var(--color-primary-blue, #3498DB);
+    border: 2px solid var(--color-primary-blue, #3498DB);
+    border-radius: var(--radius, 10px);
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: var(--gap-xs, 8px);
+    margin: var(--gap-lg, 20px) auto 0;
+    width: fit-content;
+}
+
+.eds-back:hover {
+    background: var(--color-primary-blue, #3498DB);
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+/* Empty state */
+.eds-empty {
+    text-align: center;
+    padding: var(--gap-xl, 24px) var(--gap-lg, 20px);
+    color: var(--color-text, #0F172A);
+    opacity: 0.7;
+    font-style: italic;
+    background: var(--color-background, #F7F9FB);
+    border-radius: var(--radius, 10px);
+    border: 2px dashed var(--color-muted, #E6EAF0);
+    grid-column: 1 / -1;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .enter-details-container {
+        padding: var(--gap-lg, 20px);
+        margin: var(--gap-sm, 10px);
+    }
+
+    .eds-form-section {
+        padding: var(--gap-lg, 20px);
+    }
+
+    .eds-row {
+        grid-template-columns: 1fr;
+        gap: var(--gap-md, 14px);
+    }
+
+    .eds-param-grid {
+        grid-template-columns: 1fr;
+        gap: var(--gap-md, 14px);
+    }
+
+    .eds-param-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--gap-xs, 8px);
+    }
+
+    .eds-param-meta {
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .eds-save-button,
+    .eds-back {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .enter-details-container {
+        padding: var(--gap-md, 14px);
+    }
+
+    .eds-form-section {
+        padding: var(--gap-md, 14px);
+    }
+}
+
+/* Loading state */
+.enter-details-container>p {
+    text-align: center;
+    font-size: 18px;
+    color: var(--color-text, #0F172A);
+    opacity: 0.8;
+    background: var(--color-card-bg, #FFFFFF);
+    padding: var(--gap-xl, 24px);
+    border-radius: var(--radius, 10px);
+    box-shadow: var(--elevation-1, 0 2px 6px rgba(0, 0, 0, 0.08));
+}
+
+/* Focus states for accessibility */
+.eds-text-input:focus-visible,
+.eds-picker:focus-visible,
+.eds-save-button:focus-visible,
+.eds-back:focus-visible {
+    outline: 2px solid var(--color-primary-blue, #3498DB);
+    outline-offset: 2px;
+}
+
+/* Table wrapper for overflow handling */
+.eds-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Parameter table */
+.eds-param-table {
+    width: 100%;
+    min-width: 900px;
+    /* Adjust based on your content */
+    border-collapse: collapse;
+    background: var(--color-background, #F7F9FB);
+}
+
+.eds-param-table th,
+.eds-param-table td {
+    border: 1px solid #ccc;
+    padding: 8px 6px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.eds-param-table th {
+    background: #eee;
+    font-weight: 600;
+    color: #34495e;
+}
+
+.eds-param-table td {
+    background: #fff;
+}
+
+.eds-param-table input,
+.eds-param-table select {
+    width: 95%;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] {
+    --color-background: #2C3E50;
+    --color-card-bg: #34495E;
+    --color-text: #ECF0F1;
+    --color-muted: #5C7891;
+    --color-primary-blue: #3498DB;
+    --color-success: #2ECC71;
+}
+
+/* Ensure table inherits dark mode */
+[data-theme="dark"] .eds-param-table {
+    background: var(--color-background);
+}
+
+[data-theme="dark"] .eds-param-table th {
+    background: #34495E;
+    color: #ECF0F1;
+}
+
+[data-theme="dark"] .eds-param-table td {
+    background: #2C3E50;
+    color: #ECF0F1;
+}
+
+[data-theme="dark"] .eds-param-table input,
+[data-theme="dark"] .eds-param-table select {
+    background: #34495E;
+    color: #ECF0F1;
+    border-color: #5C7891;
+}

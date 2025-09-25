@@ -1,0 +1,268 @@
+/* HomeScreen.css — Fixed dark mode support */
+
+/* Page container - force background consistency */
+.home-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--gap-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xl);
+    min-height: 100vh;
+    background: var(--color-background, #F7F9FB);
+}
+
+@media (min-width: 1600px) {
+    .home-container {
+        max-width: 1360px;
+    }
+}
+
+/* Header - ensure dark theme colors */
+.home-header {
+    background: var(--color-card-bg, #FFFFFF);
+    border-radius: var(--radius);
+    padding: var(--gap-lg);
+    text-align: center;
+    box-shadow: var(--elevation-1, 0 2px 6px rgba(0, 0, 0, 0.08));
+    border: 1px solid var(--color-muted, #E6EAF0);
+}
+
+.home-title {
+    margin: 0;
+    font-size: var(--heading-font);
+    letter-spacing: 0.5px;
+    color: var(--color-text, #0F172A);
+}
+
+.home-subtitle {
+    margin: var(--gap-xs) 0 0 0;
+    opacity: 0.9;
+    color: var(--color-text, #0F172A);
+}
+
+/* Button grid */
+.home-button-grid {
+    display: grid;
+    gap: var(--gap-md);
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+@media (min-width: 1024px) {
+    .home-button-grid {
+        grid-template-columns: repeat(3, minmax(280px, 1fr));
+    }
+}
+
+@media (min-width: 1440px) {
+    .home-button-grid {
+        grid-template-columns: repeat(4, minmax(300px, 1fr));
+    }
+}
+
+/* Tiles - fixed dark theme support */
+.home-button {
+    background: var(--color-card-bg, #FFFFFF);
+    border: 2px solid var(--color-muted, #E6EAF0);
+    color: var(--color-text, #0F172A);
+    padding: 20px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    min-height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--elevation-1, 0 2px 6px rgba(0, 0, 0, 0.08));
+}
+
+.home-button:hover {
+    border-color: var(--color-primary-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.home-button:active {
+    transform: scale(0.99);
+}
+
+.home-button:focus-visible {
+    outline: 3px solid var(--ring-color);
+    outline-offset: 2px;
+}
+
+/* Primary button styling */
+.home-primary-button {
+    background: linear-gradient(135deg,
+            var(--color-primary-blue, #3498DB) 0%,
+            color-mix(in oklab, var(--color-primary-blue, #3498DB) 90%, var(--color-card-bg, #FFFFFF)) 100%);
+    border-color: var(--color-primary-blue, #3498DB);
+    color: #ffffff;
+}
+
+.home-primary-button:hover {
+    background: var(--color-primary-blue, #3498DB);
+    border-color: var(--color-primary-blue, #3498DB);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+}
+
+/* Secondary button styling */
+.home-secondary-button {
+    background: linear-gradient(135deg,
+            var(--color-success, #2ECC71) 0%,
+            color-mix(in oklab, var(--color-success, #2ECC71) 90%, var(--color-card-bg, #FFFFFF)) 100%);
+    border-color: var(--color-success, #2ECC71);
+    color: #ffffff;
+}
+
+.home-secondary-button:hover {
+    background: var(--color-success, #2ECC71);
+    border-color: var(--color-success, #2ECC71);
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+}
+
+/* Tertiary button */
+.home-tertiary-button {
+    background: var(--color-muted, #E6EAF0);
+    border-color: var(--color-muted, #E6EAF0);
+}
+
+.home-tertiary-button:hover {
+    background: color-mix(in oklab, var(--color-muted, #E6EAF0) 80%, var(--color-text, #0F172A));
+}
+
+/* Button content */
+.home-button-content {
+    display: grid;
+    gap: 6px;
+    flex: 1;
+}
+
+.home-button-text {
+    font-weight: 700;
+    font-size: 18px;
+    color: inherit;
+}
+
+.home-button-subtext {
+    font-size: 14px;
+    opacity: 0.9;
+    color: inherit;
+}
+
+.home-button-icon {
+    font-size: 22px;
+    opacity: 0.95;
+    margin-left: 12px;
+}
+
+/* Footer */
+.home-footer {
+    text-align: center;
+    opacity: 0.9;
+    margin-top: var(--gap-md);
+}
+
+.home-footer-text {
+    margin: 0;
+    color: var(--color-text, #0F172A);
+}
+
+/* Dark theme specific enhancements */
+/* Dark theme specific enhancements - CORRECTED SYNTAX */
+@media (prefers-color-scheme: dark) {
+    .home-button {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .home-button:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .home-primary-button {
+        box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+    }
+
+    .home-primary-button:hover {
+        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.5);
+    }
+
+    .home-secondary-button {
+        box-shadow: 0 2px 8px rgba(46, 204, 113, 0.3);
+    }
+
+    .home-secondary-button:hover {
+        box-shadow: 0 6px 20px rgba(46, 204, 113, 0.5);
+    }
+}
+
+/* Manual dark theme override */
+[data-theme="dark"] .home-button {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .home-button:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .home-primary-button {
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+}
+
+[data-theme="dark"] .home-primary-button:hover {
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.5);
+}
+
+[data-theme="dark"] .home-secondary-button {
+    box-shadow: 0 2px 8px rgba(46, 204, 113, 0.3);
+}
+
+[data-theme="dark"] .home-secondary-button:hover {
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.5);
+}
+
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .home-container {
+        padding: var(--gap-lg);
+    }
+
+    .home-button-grid {
+        grid-template-columns: 1fr;
+        gap: var(--gap-sm);
+    }
+
+    .home-button {
+        min-height: 80px;
+        padding: 16px;
+    }
+
+    .home-button-text {
+        font-size: 16px;
+    }
+
+    .home-button-subtext {
+        font-size: 13px;
+    }
+
+    .home-button-icon {
+        font-size: 20px;
+        margin-left: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .home-container {
+        padding: var(--gap-md);
+    }
+
+    .home-header {
+        padding: var(--gap-md);
+    }
+
+    .home-title {
+        font-size: 24px;
+    }
+}
