@@ -29,33 +29,31 @@ const normalizeParameter = (p, idx = 0) => {
     p.Para_Unit ??
     p.unit ??
     "N/A";
-  // Better handling for min/max - trim strings, null if empty
   let min = p.Para_Min ?? p.MinValue ?? p.minvalue ?? p.Min ?? p.min ?? null;
   let max = p.Para_Max ?? p.MaxValue ?? p.maxvalue ?? p.Max ?? p.max ?? null;
   if (typeof min === "string") min = min.trim() === "" ? null : Number(min);
   if (typeof max === "string") max = max.trim() === "" ? null : Number(max);
   const type = p.Para_Type ?? p.type ?? "Quantitative";
-  // NEW: Extract Criteria for Qualitative display
   const criteria = p.Criteria ?? p.criteria ?? p.Criteria_Description ?? null;
+  const inspectorName =
+    p.Inspector_Name ?? p.InspectorName ?? p.inspector ?? null;
   return { id, name, unit, min, max, type, criteria, raw: p };
 };
 
-// Build IST local YYYY-MM-DDTHH:mm for input type="datetime-local"
+// Build IST local YYYY-MM-DD for input type="date"
 const nowIstLocal = (() => {
   const fmt = new Intl.DateTimeFormat("en-GB", {
     timeZone: "Asia/Kolkata",
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
   });
   const parts = fmt.formatToParts(new Date());
   const get = (t) => parts.find((p) => p.type === t)?.value;
   return `${get("year")}-${get("month")}-${get("day")}`;
 })();
 
-// Convert the datetime-local value into an ISO string with IST offset (+05:30)
+// Convert the date value into an ISO string
 const toIstIso = (localMinuteString) => {
   if (!localMinuteString) return null;
   return `${localMinuteString}`;
@@ -68,6 +66,9 @@ const EnterDetailsScreen = ({ navigation }) => {
   const [dateTime, setDateTime] = useState(nowIstLocal);
   const [shiftName, setShiftName] = useState("");
   const [lineName, setLineName] = useState("");
+
+  // Inspector name moved here from modal
+  const [inspectorName, setInspectorName] = useState("");
 
   // Configuration data from backend
   const [configurations, setConfigurations] = useState([]);
@@ -100,18 +101,13 @@ const EnterDetailsScreen = ({ navigation }) => {
   // Flag to control if parameters section should be shown
   const [showParameters, setShowParameters] = useState(false);
 
-  // NEW: Inspector modal states
-  const [showInspectorModal, setShowInspectorModal] = useState(false);
-  const [inspectorName, setInspectorName] = useState("");
-  const inspectorInputRef = useRef(null);
-
   // Global flag for any validation errors (submit disable)
   const hasValidationErrors = useMemo(
     () => Object.keys(validationErrors).length > 0,
     [validationErrors]
   );
 
-  // FIXED: Reactive full validation on entries change only (no overlap)
+  // Enhanced validation for both quantitative and qualitative
   useEffect(() => {
     if (!showParameters || parameters.length === 0) return;
 
@@ -121,7 +117,7 @@ const EnterDetailsScreen = ({ navigation }) => {
       const e = entries[p.id];
       if (!e) return;
 
-      const error = validateQuantitative(p.id, e.value, e.remark);
+      const error = validateParameter(p.id, e.value, e.remark);
       if (error) {
         newErrors[p.id] = error;
         errorCount++;
@@ -133,7 +129,7 @@ const EnterDetailsScreen = ({ navigation }) => {
       `Re-validating all: ${errorCount} errors remaining (${Object.keys(
         newErrors
       ).join(", ")})`
-    ); // Debug: Shows if errors persist
+    );
   }, [entries, parameters, showParameters]);
 
   useEffect(() => {
@@ -167,14 +163,27 @@ const EnterDetailsScreen = ({ navigation }) => {
     }
   };
 
-  // FIXED: Validation - Skip qualitative/non-numbers, strict trim on remark
-  const validateQuantitative = (paramId, value, remark) => {
+  // Combined validation for both quantitative and qualitative parameters
+  const validateParameter = (paramId, value, remark) => {
     const param = parameters.find((p) => p.id === paramId);
-    if (!param || !param.type || param.type.toLowerCase().includes("qual"))
-      return null; // Skip qualitative
+    if (!param) return null;
 
+    const isQualitative = param.type?.toLowerCase().includes("qual");
+
+    // Qualitative validation: "NOT OK" requires remarks
+    if (isQualitative) {
+      if (value === "NOT OK") {
+        const trimmedRemark = (remark || "").trim();
+        if (trimmedRemark === "") {
+          return `"NOT OK" selected: Remarks required to explain the issue`;
+        }
+      }
+      return null;
+    }
+
+    // Quantitative validation
     const numValue = Number(value);
-    if (isNaN(numValue) || value.trim() === "") return null; // Skip non-numbers/empty (includes "OK")
+    if (isNaN(numValue) || value.trim() === "") return null;
 
     const minVal = param.min != null ? Number(param.min) : null;
     const maxVal = param.max != null ? Number(param.max) : null;
@@ -187,7 +196,6 @@ const EnterDetailsScreen = ({ navigation }) => {
       (!hasMin || numValue >= minVal) && (!hasMax || numValue <= maxVal);
     if (inRange) return null;
 
-    // FIXED: Strict trim - require meaningful remark
     const trimmedRemark = (remark || "").trim();
     if (trimmedRemark === "") {
       return `Value ${numValue} out-of-range (min ${
@@ -195,10 +203,9 @@ const EnterDetailsScreen = ({ navigation }) => {
       }, max ${hasMax ? maxVal : "none"}): Remarks required`;
     }
 
-    return null; // Valid remark = clear
+    return null;
   };
 
-  // FIXED: Handle changes - Only update state (validation in useEffect)
   const handleEntryChange = (id, field, value) => {
     setEntries((prev) => ({
       ...prev,
@@ -207,13 +214,11 @@ const EnterDetailsScreen = ({ navigation }) => {
         [field]: value,
       },
     }));
-    // No validation here - useEffect handles reactive check
     console.log(
       `Updated ${field} for ${id}: "${value}" (validation will re-run)`
-    ); // Debug
+    );
   };
 
-  // Blur handlers - Just update state (triggers useEffect)
   const handleValueBlur = (id, value) => handleEntryChange(id, "value", value);
   const handleRemarkBlur = (id, remark) =>
     handleEntryChange(id, "remark", remark);
@@ -247,6 +252,7 @@ const EnterDetailsScreen = ({ navigation }) => {
 
       let filteredParams;
       let initialEntries = {};
+      let loadedInspectorName = ""; // NEW: Store loaded inspector name
 
       if (
         logsRes?.success &&
@@ -292,30 +298,52 @@ const EnterDetailsScreen = ({ navigation }) => {
             remark: "",
           };
         });
+
+        // NEW: Extract inspector name from the most recent log
+        // Find the log with the highest Log_ID to get the latest inspector
+        const latestLog = logsRes.data.reduce((latest, current) => {
+          return Number(current.Log_ID) > Number(latest.Log_ID)
+            ? current
+            : latest;
+        }, logsRes.data[0]);
+
+        // Extract Inspector_Name from the latest log
+        loadedInspectorName =
+          latestLog.Inspector_Name ||
+          latestLog.inspector ||
+          latestLog.Inspector ||
+          latestLog.InspectorName ||
+          "";
+
+        console.log("Loaded Inspector Name:", loadedInspectorName);
       } else {
         console.log("No logs found: Using all parameters for new entry.");
         filteredParams = allNormalizedParams;
         filteredParams.forEach((p) => {
           initialEntries[p.id] = { value: "", remark: "" };
         });
+        // No logs means no inspector name to load
+        loadedInspectorName = "";
       }
 
       setParameters(filteredParams);
       setEntries(initialEntries);
+      setInspectorName(loadedInspectorName); // NEW: Set inspector name
       setShowParameters(true);
-      setValidationErrors({}); // Clean start - useEffect will validate on first change
+      setValidationErrors({});
 
       console.log(
         "Loaded",
         filteredParams.length,
-        "parameters. Edit to trigger validation."
+        "parameters with inspector:",
+        loadedInspectorName
       );
     } catch (err) {
       console.error("Error loading data:", err);
       alert("Failed to load data. Please try again.");
       try {
         const paramsRes = await ApiService.getParameters();
-        if (paramsRes?.success && Array.isArray(res.data)) {
+        if (paramsRes?.success && Array.isArray(paramsRes.data)) {
           const allParams = paramsRes.data.map((p, i) =>
             normalizeParameter(p, i)
           );
@@ -325,6 +353,7 @@ const EnterDetailsScreen = ({ navigation }) => {
           });
           setParameters(allParams);
           setEntries(emptyEntries);
+          setInspectorName(""); // Clear inspector name on error
           setShowParameters(true);
           setValidationErrors({});
         }
@@ -334,7 +363,7 @@ const EnterDetailsScreen = ({ navigation }) => {
     }
   };
 
-  // Submit validation (final check)
+  // Validate including inspector name
   const validate = () => {
     if (!dateTime) {
       alert("Please select Date & Time.");
@@ -348,9 +377,15 @@ const EnterDetailsScreen = ({ navigation }) => {
       alert("Please select Line.");
       return false;
     }
+    if (!inspectorName.trim()) {
+      alert("Please enter Inspector Name.");
+      return false;
+    }
 
     if (hasValidationErrors) {
-      alert("Please add remarks to out-of-range values (see red rows).");
+      alert(
+        "Please add remarks to out-of-range values or 'NOT OK' qualitative parameters (see red rows)."
+      );
       return false;
     }
 
@@ -368,10 +403,11 @@ const EnterDetailsScreen = ({ navigation }) => {
     });
   }, [entries, parameters]);
 
-  // NEW: Prepare items and proceed to save (called from modal OK)
-  const proceedToSave = async (inspector) => {
+  // Simplified save without modal
+  const handleSave = async () => {
+    if (!validate()) return;
+
     setLoading(true);
-    setShowInspectorModal(false);
     try {
       const dateIsoIst = toIstIso(dateTime);
       if (!dateIsoIst) {
@@ -388,7 +424,6 @@ const EnterDetailsScreen = ({ navigation }) => {
         const isQual = p.type?.toLowerCase().includes("qual");
         const measureValue = isQual ? String(e.value) : Number(e.value);
 
-        // NEW: Add inspector to each item
         items.push({
           datetime: dateIsoIst,
           shiftname: shiftName,
@@ -400,7 +435,7 @@ const EnterDetailsScreen = ({ navigation }) => {
           maxvalue: p.max ?? null,
           measurevalue: measureValue,
           remark: e.remark || "",
-          inspector: inspector, // NEW: Inspector name field
+          inspector: inspectorName.trim(),
         });
       }
 
@@ -430,40 +465,13 @@ const EnterDetailsScreen = ({ navigation }) => {
         return next;
       });
       setValidationErrors({});
-      setInspectorName(""); // Reset inspector
+      // Keep inspector name for next entry
     } catch (err) {
       console.error("Save error:", err);
       alert("Failed to save. Please try again.");
     } finally {
       setLoading(false);
     }
-  };
-
-  // NEW: Handle Submit - Validate and show inspector modal
-  const handleSave = () => {
-    if (!validate()) return;
-
-    setShowInspectorModal(true);
-    setInspectorName(""); // Clear previous
-    // Focus input after short delay (modal render)
-    setTimeout(() => inspectorInputRef.current?.focus(), 100);
-  };
-
-  // NEW: Handle modal cancel
-  const handleCancelInspector = () => {
-    setShowInspectorModal(false);
-    setInspectorName("");
-  };
-
-  // NEW: Handle modal OK - Validate inspector name
-  const handleConfirmInspector = () => {
-    const trimmedName = inspectorName.trim();
-    if (!trimmedName) {
-      alert("Inspector name is required.");
-      inspectorInputRef.current?.focus();
-      return;
-    }
-    proceedToSave(trimmedName);
   };
 
   if (loading) {
@@ -542,18 +550,27 @@ const EnterDetailsScreen = ({ navigation }) => {
         <div className="eds-form-section">
           <div className="eds-section-title">Parameters</div>
 
+          {/* Inspector Name Input at top of parameters section */}
+          <div className="eds-row eds-inspector-section">
+            <div className="eds-input-group full">
+              <label className="eds-label eds-inspector-label">
+                Inspector Name <span className="required-star">*</span>
+              </label>
+              <input
+                type="text"
+                className="eds-text-input"
+                value={inspectorName}
+                onChange={(e) => setInspectorName(e.target.value)}
+                placeholder="Enter inspector name (required)"
+              />
+            </div>
+          </div>
+
           {/* Global warning */}
           {hasValidationErrors && (
-            <div
-              style={{
-                color: "red",
-                textAlign: "center",
-                marginBottom: "10px",
-                fontWeight: "bold",
-              }}
-            >
-              Add remarks to out-of-range values (red rows below) to enable
-              Submit.
+            <div className="eds-validation-warning">
+              Add remarks to out-of-range values or "NOT OK" qualitative
+              parameters (red rows below) to enable Submit.
             </div>
           )}
 
@@ -568,7 +585,6 @@ const EnterDetailsScreen = ({ navigation }) => {
                   <th>Target (Max)</th>
                   <th>Criteria</th>
                   <th>UOM</th>
-                  {/* UPDATED: New Criteria header */}
                   <th>Measured Value</th>
                   <th>Remarks</th>
                 </tr>
@@ -579,14 +595,13 @@ const EnterDetailsScreen = ({ navigation }) => {
                   const error = validationErrors[p.id];
                   const isOutOfRange = !!error;
                   const remarkPlaceholder = isOutOfRange
-                    ? "Required: Explain out-of-range"
+                    ? "Required: Explain issue"
                     : "Optional";
                   return (
                     <React.Fragment key={p.id}>
                       <tr className={isOutOfRange ? "row-error" : ""}>
                         <td>{i + 1}</td>
-                        <td>{p.name}</td>{" "}
-                        {/* UPDATED: Simple name, no inline criteria */}
+                        <td>{p.name}</td>
                         <td>{p.type || ""}</td>
                         <td>{p.min ?? ""}</td>
                         <td>{p.max ?? ""}</td>
@@ -596,9 +611,8 @@ const EnterDetailsScreen = ({ navigation }) => {
                           p.criteria
                             ? p.criteria
                             : ""}
-                        </td>{" "}
+                        </td>
                         <td>{p.unit ?? ""}</td>
-                        {/* UPDATED: New Criteria cell - show only for qualitative */}
                         <td>
                           {p.type && p.type.toLowerCase().includes("qual") ? (
                             <select
@@ -661,17 +675,7 @@ const EnterDetailsScreen = ({ navigation }) => {
                       </tr>
                       {error && (
                         <tr>
-                          <td
-                            colSpan="9" // UPDATED: Increased to 9 for new column
-                            className="error-message"
-                            style={{
-                              color: "red",
-                              fontSize: "0.9em",
-                              textAlign: "left",
-                              backgroundColor: "#ffebee",
-                              padding: "8px",
-                            }}
-                          >
+                          <td colSpan="9" className="error-message">
                             ⚠️ {error}
                           </td>
                         </tr>
@@ -688,7 +692,12 @@ const EnterDetailsScreen = ({ navigation }) => {
       <button
         className="eds-save-button"
         onClick={handleSave}
-        disabled={loading || !showParameters || hasValidationErrors}
+        disabled={
+          loading ||
+          !showParameters ||
+          hasValidationErrors ||
+          !inspectorName.trim()
+        }
       >
         {loading ? "Saving..." : "Submit"}
       </button>
@@ -696,38 +705,6 @@ const EnterDetailsScreen = ({ navigation }) => {
       <button className="eds-back" onClick={() => navigation?.goBack?.()}>
         ← Back
       </button>
-
-      {showInspectorModal && (
-        <div className="eds-modal-overlay">
-          <div className="eds-modal-container">
-            <h3 className="eds-modal-title">Enter Inspector Name</h3>
-            <input
-              ref={inspectorInputRef}
-              type="text"
-              value={inspectorName}
-              onChange={(e) => setInspectorName(e.target.value)}
-              placeholder="Inspector Name (required)"
-              className="eds-text-input eds-modal-input"
-              autoFocus
-            />
-            <div className="eds-modal-actions">
-              <button
-                onClick={handleCancelInspector}
-                className="btn-outline eds-modal-btn"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleConfirmInspector}
-                className="btn-primary eds-modal-btn"
-                disabled={!inspectorName.trim()} // Optional: Disable if empty
-              >
-                OK
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

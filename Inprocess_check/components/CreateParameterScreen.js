@@ -246,7 +246,6 @@ const CreateParameterScreen = ({ navigation }) => {
               <span className="error">{errors.parameterName}</span>
             )}
           </div>
-
           <div className="create-param-field">
             <label className="create-param-label">Unit *</label>
             <input
@@ -259,24 +258,21 @@ const CreateParameterScreen = ({ navigation }) => {
             {/* NEW: Inline error display */}
             {errors.unit && <span className="error">{errors.unit}</span>}
           </div>
-
           {/* UPDATED: Show Criteria only for Qualitative */}
-          {parameterType === "Qualitative" && (
-            <div className="create-param-field">
-              <label className="create-param-label">Criteria *</label>
-              <input
-                className="create-param-input"
-                type="text"
-                value={Criteria}
-                onChange={(e) => setCriteria(e.target.value)}
-                placeholder="Enter Criteria (e.g., No Pin Holes, No Cracks)"
-              />
-              {/* NEW: Inline error display */}
-              {errors.Criteria && (
-                <span className="error">{errors.Criteria}</span>
-              )}
-            </div>
-          )}
+          <div className="create-param-field">
+            <label className="create-param-label">Criteria *</label>
+            <input
+              className="create-param-input"
+              type="text"
+              value={Criteria}
+              onChange={(e) => setCriteria(e.target.value)}
+              placeholder="Enter Criteria (e.g., No Pin Holes, No Cracks)"
+            />
+            {/* NEW: Inline error display */}
+            {errors.Criteria && (
+              <span className="error">{errors.Criteria}</span>
+            )}
+          </div>
 
           <div className="create-param-field">
             <label className="create-param-label">Parameter Type *</label>
@@ -289,7 +285,6 @@ const CreateParameterScreen = ({ navigation }) => {
               <option value="Qualitative">Qualitative (Ok/Not Ok)</option>
             </select>
           </div>
-
           {parameterType === "Quantitative" && (
             <>
               <div className="create-param-field">
