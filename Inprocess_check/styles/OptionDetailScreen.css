@@ -1,0 +1,124 @@
+/* OptionDetailScreen.css */
+
+.option-detail-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: var(--gap-xl);
+  min-height: calc(100vh - 100px);
+  background: var(--color-background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-detail-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xl);
+}
+
+.option-detail-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-md);
+}
+
+.option-detail-icon {
+  font-size: 64px;
+  background: var(--color-card-bg);
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--elevation-1);
+  border: 3px solid var(--color-muted);
+}
+
+.option-detail-title {
+  margin: 0;
+  font-size: 26px;
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.option-detail-info-card {
+  background: var(--color-card-bg);
+  border-radius: var(--radius);
+  padding: var(--gap-xl);
+  box-shadow: var(--elevation-1);
+  border: 1px solid var(--color-muted);
+}
+
+.option-detail-info-title {
+  margin: 0 0 var(--gap-md) 0;
+  font-size: 18px;
+  color: var(--color-text);
+  font-weight: 600;
+  border-bottom: 2px solid var(--color-primary-blue);
+  padding-bottom: var(--gap-xs);
+}
+
+.option-detail-info-text {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text);
+  opacity: 0.9;
+}
+
+.option-detail-action-button {
+  background: var(--color-danger);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 18px 32px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-sm);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.option-detail-action-button:hover {
+  background: color-mix(in oklab, var(--color-danger) 90%, black);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+}
+
+.option-detail-button-text {
+  font-size: 18px;
+}
+
+.option-detail-button-arrow {
+  font-size: 22px;
+  transition: transform 0.2s ease;
+}
+
+.option-detail-action-button:hover .option-detail-button-arrow {
+  transform: translateX(4px);
+}
+
+@media (max-width: 768px) {
+  .option-detail-container {
+    padding: var(--gap-lg);
+  }
+
+  .option-detail-icon {
+    width: 80px;
+    height: 80px;
+    font-size: 48px;
+  }
+
+  .option-detail-title {
+    font-size: 22px;
+  }
+}

@@ -1,0 +1,141 @@
+/* DownloadOptions.css */
+
+.download-options-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--gap-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xl);
+  min-height: calc(100vh - 100px);
+  background: var(--color-background);
+}
+
+.download-options-header {
+  background: var(--color-card-bg);
+  border-radius: var(--radius);
+  padding: var(--gap-lg);
+  text-align: center;
+  box-shadow: var(--elevation-1);
+  border: 1px solid var(--color-muted);
+}
+
+.download-options-title {
+  margin: 0;
+  font-size: var(--heading-font);
+  color: var(--color-text);
+}
+
+.download-options-subtitle {
+  margin: var(--gap-xs) 0 0 0;
+  opacity: 0.8;
+  color: var(--color-text);
+  font-size: 16px;
+}
+
+.download-options-grid {
+  display: grid;
+  gap: var(--gap-lg);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.download-option-button {
+  background: var(--color-card-bg);
+  border: 2px solid var(--color-muted);
+  border-radius: var(--radius);
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--elevation-1);
+  min-height: 140px;
+}
+
+.download-option-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.download-option-date {
+  border-color: #3498DB;
+}
+
+.download-option-date:hover {
+  background: linear-gradient(135deg, var(--color-card-bg) 0%, color-mix(in oklab, #3498DB 10%, var(--color-card-bg)) 100%);
+  border-color: #3498DB;
+}
+
+.download-option-shift {
+  border-color: #E67E22;
+}
+
+.download-option-shift:hover {
+  background: linear-gradient(135deg, var(--color-card-bg) 0%, color-mix(in oklab, #E67E22 10%, var(--color-card-bg)) 100%);
+  border-color: #E67E22;
+}
+
+.download-option-parameter {
+  border-color: #2ECC71;
+}
+
+.download-option-parameter:hover {
+  background: linear-gradient(135deg, var(--color-card-bg) 0%, color-mix(in oklab, #2ECC71 10%, var(--color-card-bg)) 100%);
+  border-color: #2ECC71;
+}
+
+.download-option-all {
+  border-color: #9B59B6;
+}
+
+.download-option-all:hover {
+  background: linear-gradient(135deg, var(--color-card-bg) 0%, color-mix(in oklab, #9B59B6 10%, var(--color-card-bg)) 100%);
+  border-color: #9B59B6;
+}
+
+.download-option-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--gap-sm);
+}
+
+.download-option-icon {
+  font-size: 48px;
+  margin-bottom: var(--gap-xs);
+}
+
+.download-option-text {
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--color-text);
+}
+
+.download-option-desc {
+  font-size: 14px;
+  opacity: 0.8;
+  color: var(--color-text);
+}
+
+@media (max-width: 768px) {
+  .download-options-container {
+    padding: var(--gap-lg);
+  }
+
+  .download-options-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .download-option-icon {
+    font-size: 40px;
+  }
+
+  .download-option-text {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .download-options-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -11,17 +11,15 @@ import {
 
 import { useEffect } from "react";
 
-// Load CSS only on web
-if (Platform.OS === "web") {
-  require("./styles/themes.css");
-  require("./styles/HomeScreen.css");
-  require("./styles/EnterDetailsScreen.css");
-  require("./styles/CreateParameterScreen.css");
-  require("./styles/Downloads.css");
-}
+
+
+// Change initialRouteName to "ApplicationSelection"
 
 // Screens
-import HomeScreen from "./components/HomeScreen";
+import ApplicationSelectionScreen from "./components/ApplicationSelectionScreen";
+import MenuScreen from "./components/MenuScreen";
+import OptionDetailScreen from "./components/OptionDetailScreen";
+import DownloadOptionsScreen from "./components/DownloadOptionsScreen";
 import CreateParameterScreen from "./components/CreateParameterScreen";
 import EnterDetailsScreen from "./components/EnterDetailsScreen";
 import Datewisedownload from "./components/Datewisedownload";
@@ -29,12 +27,23 @@ import Shiftwisedownload from "./components/Shiftwisedownload";
 import Parameterwisedownload from "./components/Parameterwisedownload";
 import Downloadscreen from "./components/Downloadscreen";
 
+if (Platform.OS === "web") {
+  require("./styles/themes.css");
+  require("./styles/HomeScreen.css");
+  require("./styles/EnterDetailsScreen.css");
+  require("./styles/CreateParameterScreen.css");
+  require("./styles/Downloads.css");
+  require("./styles/ApplicationSelection.css");
+  require("./styles/MenuScreen.css");
+  require("./styles/OptionDetailScreen.css");
+  require("./styles/DownloadOptions.css");
+}
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const systemTheme = useColorScheme(); // Detect system theme automatically
+  const systemTheme = useColorScheme();
 
-  // Apply theme to document (web only)
   useEffect(() => {
     if (Platform.OS === "web" && typeof document !== "undefined") {
       document.documentElement.setAttribute("data-theme", systemTheme);
@@ -54,22 +63,15 @@ export default function App() {
         justifyContent: "flex-start",
       }}
     >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "1200px", // Match your container max-width
-          flex: 1,
-        }}
-      >
+      <div style={{ width: "100%", maxWidth: "1200px", flex: 1 }}>
         <NavigationContainer>
-          <StatusBar style={systemTheme === "dark" ? "light" : "dark"} />{" "}
-          {/* Theme-aware */}
+          <StatusBar style={systemTheme === "dark" ? "light" : "dark"} />
           <Stack.Navigator
-            initialRouteName="Home"
+            initialRouteName="ApplicationSelection"
             screenOptions={({ navigation }) => ({
               headerLeft: () => (
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("Home")}
+                  onPress={() => navigation.navigate("ApplicationSelection")}
                   style={{ marginLeft: 10 }}
                 >
                   <Image
@@ -85,35 +87,63 @@ export default function App() {
               headerTitleStyle: { fontWeight: "bold" },
             })}
           >
-            {/* Pass systemTheme to HomeScreen if needed */}
-            <Stack.Screen name="Home" options={{ title: "" }}>
-              {(props) => <HomeScreen {...props} theme={systemTheme} />}
+            <Stack.Screen
+              name="ApplicationSelection"
+              options={{ title: "Select Application" }}
+            >
+              {(props) => (
+                <ApplicationSelectionScreen {...props} theme={systemTheme} />
+              )}
             </Stack.Screen>
+
+            <Stack.Screen
+              name="MenuScreen"
+              component={MenuScreen}
+              options={{ title: "Menu" }}
+            />
+
+            <Stack.Screen
+              name="OptionDetailScreen"
+              component={OptionDetailScreen}
+              options={{ title: "Option Details" }}
+            />
+
+            <Stack.Screen
+              name="DownloadOptions"
+              component={DownloadOptionsScreen}
+              options={{ title: "Download Options" }}
+            />
+
             <Stack.Screen
               name="CreateParameter"
               component={CreateParameterScreen}
               options={{ title: "Create Parameter" }}
             />
+
             <Stack.Screen
               name="EnterDetails"
               component={EnterDetailsScreen}
               options={{ title: "Enter Details" }}
             />
+
             <Stack.Screen
               name="Datewisedownload"
               component={Datewisedownload}
               options={{ title: "Date wise download" }}
             />
+
             <Stack.Screen
               name="Shiftwisedownload"
               component={Shiftwisedownload}
               options={{ title: "Shift wise download" }}
             />
+
             <Stack.Screen
               name="Parameterwisedownload"
               component={Parameterwisedownload}
               options={{ title: "Parameter wise download" }}
             />
+
             <Stack.Screen
               name="Downloadscreen"
               component={Downloadscreen}
