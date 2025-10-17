@@ -69,9 +69,18 @@ body {
 
 #root {
     background: var(--color-background);
+    background-color: #1a2a3a;
     min-height: 100vh;
     color: var(--color-text);
 }
+
+
+.app-selection-container, .create-param-container, .enter-details-container, .downloads-container {
+  background-color: #1a2a3a;
+  min-height: 100vh;
+}
+
+
 
 .App {
     background: var(--color-background);

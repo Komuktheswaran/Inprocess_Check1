@@ -1,6 +1,6 @@
 // components/DownloadOptionsScreen.js
 import React from "react";
-import "../styles/DownloadOptions.css";
+import "../../styles/DownloadOptions.css";
 
 const DownloadOptionsScreen = ({ navigation, route }) => {
   const { appType } = route.params;
@@ -18,6 +18,7 @@ const DownloadOptionsScreen = ({ navigation, route }) => {
 
   return (
     <div className="download-options-container">
+      <h1> download option</h1>
       <div className="download-options-header">
         <h1 className="download-options-title">Download Options</h1>
         <p className="download-options-subtitle">
@@ -26,6 +27,46 @@ const DownloadOptionsScreen = ({ navigation, route }) => {
       </div>
 
       <div className="download-options-grid">
+        <button
+          className="home-button shadow-1"
+          onClick={() => openMode("date")}
+        >
+          <span className="home-button-text">Date wise</span>
+          <span className="home-button-icon" aria-hidden>
+            📅
+          </span>
+        </button>
+
+        <button
+          className="home-button shadow-1"
+          onClick={() => openMode("shift")}
+        >
+          <span className="home-button-text">Shift wise</span>
+          <span className="home-button-icon" aria-hidden>
+            ⏱️
+          </span>
+        </button>
+
+        <button
+          className="home-button shadow-1"
+          onClick={() => openMode("parameter")}
+        >
+          <span className="home-button-text">Parameters wise</span>
+          <span className="home-button-icon" aria-hidden>
+            🧪
+          </span>
+        </button>
+
+        <button
+          className="home-button shadow-1"
+          onClick={() => openMode("all")}
+        >
+          <span className="home-button-text">All above</span>
+          <span className="home-button-icon" aria-hidden>
+            ⬇️
+          </span>
+        </button>
+
         <button
           className="download-option-button download-option-date"
           onClick={() => openDownloadMode("date")}

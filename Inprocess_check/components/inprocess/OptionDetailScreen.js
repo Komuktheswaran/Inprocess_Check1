@@ -1,6 +1,6 @@
 // components/OptionDetailScreen.js
 import React from "react";
-import "../styles/OptionDetailScreen.css";
+import "../../styles/OptionDetailScreen.css";
 
 const OptionDetailScreen = ({ navigation, route }) => {
   const { appType, option } = route.params;
@@ -70,6 +70,7 @@ const OptionDetailScreen = ({ navigation, route }) => {
 
   return (
     <div className="option-detail-container">
+      <h1> option details</h1>
       <div className="option-detail-content">
         <div className="option-detail-header">
           <div className="option-detail-icon">{getOptionIcon()}</div>

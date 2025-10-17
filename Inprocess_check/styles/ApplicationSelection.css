@@ -1,5 +1,14 @@
 /* ApplicationSelection.css */
 
+
+#root, .main-app-background {
+  background-color: var(--color-background);
+
+  min-height: 100vh;
+}
+
+
+
 .app-selection-container {
   max-width: 800px;
   margin: 0 auto;

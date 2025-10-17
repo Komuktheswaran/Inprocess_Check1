@@ -2,11 +2,16 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import "../styles/ApplicationSelection.css";
+
 import logo from "../assets/logo.png";
 
 const ApplicationSelectionScreen = ({ navigation, theme }) => {
   const selectApplication = (appType) => {
-    navigation.navigate("MenuScreen", { appType });
+    if (appType === "inprocess") {
+      navigation.navigate("MenuScreen", { appType });
+    } else if (appType === "bom") {
+      navigation.navigate("bommenuscreen", { appType }); // Point to BOM's menu or entry screen
+    }
   };
 
   return (
@@ -46,12 +51,6 @@ const ApplicationSelectionScreen = ({ navigation, theme }) => {
           <span className="app-selection-button-icon">→</span>
         </button>
       </div>
-      <button
-        className="btn-outline back-button"
-        onClick={() => navigation.goBack()}
-      >
-        ← Back to Home
-      </button>
     </div>
   );
 };
