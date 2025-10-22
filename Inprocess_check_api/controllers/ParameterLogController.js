@@ -104,23 +104,15 @@ class ParameterLogController {
   }
   async queryLogs(req, res) {
     try {
-      const {
-        mode,
-        from,
-        to,
-        shift,
-        line,
-        paraid,
-        onDate,
-        top = 1000,
-      } = req.query;
+      const { mode, from, to, shift, line, paraid, onDate } = req.query;
 
       const pool = database.getPool();
       const request = new sql.Request(pool);
+      console.log("Querying parameter logs with:", req.query);
 
       // Base query matching your existing structure
       let query = `
-                SELECT TOP (@top)
+                SELECT *,
                     pl.Log_ID,
                     pl.Log_DateTime as LogDateTime,
                     pl.Shift_Name as ShiftName,
@@ -138,7 +130,6 @@ class ParameterLogController {
             `;
 
       const conditions = [];
-      request.input("top", sql.Int, parseInt(top));
 
       // Date range filtering
       if (from) {
@@ -190,20 +181,9 @@ class ParameterLogController {
       // Order by most recent first
       query += " ORDER BY pl.Log_DateTime DESC";
 
-      console.log("Executing query:", query);
-      console.log("With parameters:", {
-        mode,
-        from,
-        to,
-        shift,
-        line,
-        paraid,
-        onDate,
-        top,
-      });
-
       const result = await request.query(query);
 
+      console.log("Parameter logs query result count:", result);
       res.json({
         success: true,
         data: result.recordset,

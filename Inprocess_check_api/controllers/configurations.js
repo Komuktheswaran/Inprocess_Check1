@@ -1,5 +1,5 @@
 // controllers/configurationsController.js
-const database = require("../config/database");
+const database = require("../../Inprocess_check_api/config/database");
 const sql = require("mssql");
 
 const configurations = {
