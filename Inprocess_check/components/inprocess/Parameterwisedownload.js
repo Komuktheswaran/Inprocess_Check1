@@ -131,7 +131,7 @@ const Parameterwisedownload = ({ navigation }) => {
 
   const exportCsv = (rows) => {
     const headers = [
-      "LogDateTime",
+      "LogDate",
       "ShiftName",
       "LineName",
       "ParaName",
@@ -142,7 +142,7 @@ const Parameterwisedownload = ({ navigation }) => {
       headers.join(","),
       ...rows.map((r) =>
         [
-          r.LogDateTime ?? "",
+          r.LogDateTime ? r.LogDateTime.split("T")[0] : "",
           r.ShiftName ?? "",
           r.LineName ?? "",
           r.ParaName ?? "",
